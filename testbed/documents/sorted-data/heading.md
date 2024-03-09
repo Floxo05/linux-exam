@@ -7,4 +7,3 @@ Ein weiteres Beispiel für eine Markdown-Datei.
 - Element C
 - Element D
 - Element E
- 
