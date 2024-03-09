@@ -23,6 +23,11 @@ awk 'seen[$2]++ {print $2}' "$temp_hash_file" | while read -r hash; do
     first_file=$(echo "$files" | head -n 1)
     for file in $files; do
         if [ "$file" != "$first_file" ]; then
+            # Überprüfen, ob der Pfad absolut ist, falls nicht, machen Sie ihn absolut
+            if [[ "$file" != /* ]]; then
+                file="$folder_path/$file"
+            fi
+            # Erstellen des Symlinks
             ln -sf "$first_file" "$file"
             echo "Ersetze $file durch Symlink zu $first_file"
         fi
@@ -30,6 +35,6 @@ awk 'seen[$2]++ {print $2}' "$temp_hash_file" | while read -r hash; do
 done
 
 # Temporäre Hash-Liste löschen
-# rm "$temp_hash_file"
+rm "$temp_hash_file"
 
 echo "Dubletten wurden durch Symlinks ersetzt."
