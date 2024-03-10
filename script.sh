@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Überprüfen, ob ein Argument übergeben wurde. Wenn nicht, geben Sie eine Fehlermeldung aus und beenden Sie das Skript.
-if [[ $# != 2 ]]; then
-    echo "Bitte geben Sie genau zwei Ordnerpfade als Argumente an."
+if [[ $# != 1 ]]; then
+    echo "Bitte geben Sie einen Ordnerpfad als Argument an."
     exit 1
 fi
 
@@ -10,10 +10,10 @@ fi
 folder_path="$1"
 
 # Speichern des zweiten Arguments (Ordnerpfad für Dublette-Kopien) in der Variable duplicate_folder_path.
-duplicate_folder_path="$2"
+duplicate_folder_path="$PWD/.originals"
 
 # Überprüfen, ob der angegebene Ordner existiert, und erstellen, falls nicht.
-mkdir -p "$duplicate_folder_path"
+mkdir -p "$duplicate_folder_path"script_pure.sh
 
 # Erstellen einer temporären Datei für die Hash-Liste.
 temp_hash_file=$(mktemp) # Erstellt Datei unter /tmp/ in der Form tmp.????????
@@ -38,8 +38,14 @@ do
     path=$(echo "$line" | cut -d' ' -f3) # 3, Weil sha256sum zwei Leerzeichen zwischen hash und Pfad setzt
     # Extrahieren der Dateiendung aus dem Pfad.
     extension="${path##*.}"
+
     # Erstellen eines neuen Pfads für die Kopie, der die ursprüngliche Dateiendung beibehält.
-    destination_copy_path="$duplicate_folder_path/$hash.$extension"
+    if [[ $duplicate_folder_path == */ ]]; then
+        destination_copy_path="$duplicate_folder_path$hash.$extension"
+    else
+        destination_copy_path="$duplicate_folder_path/$hash.$extension"
+    fi
+
     
     # Überprüfen, ob der Hash bereits im Array gesehen wurde.
     if [[ -n "${seen_hashes[$hash]}" ]]; then # -n, ob ein String mit einer Länge < 0 vorhanden ist
@@ -53,10 +59,14 @@ do
             echo '';
         else
             # Wenn nein, den Pfad aus seen_hashes[$hash] verwenden und diesen linken.
+
+            # Datei kopieren
             cp "$first_path" "$destination_copy_path"
 
+            # Datei in Symlink wandeln
             ln -sf "$destination_copy_path" "$first_path"
 
+            # Meldung Ausgeben
             echo "Ersetzt durch Symlink und kopiert: $first_path -> $destination_copy_path"
         fi
 
