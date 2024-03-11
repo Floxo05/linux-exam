@@ -10,10 +10,10 @@ fi
 folder_path="$1"
 
 # Speichern des zweiten Arguments (Ordnerpfad für Dublette-Kopien) in der Variable duplicate_folder_path.
-duplicate_folder_path="$PWD/.originals"
+duplicate_folder_path="$HOME/.originals"
 
 # Überprüfen, ob der angegebene Ordner existiert, und erstellen, falls nicht.
-mkdir -p "$duplicate_folder_path"script_pure.sh
+mkdir -p "$duplicate_folder_path"
 
 # Erstellen einer temporären Datei für die Hash-Liste.
 temp_hash_file=$(mktemp) # Erstellt Datei unter /tmp/ in der Form tmp.????????
@@ -85,5 +85,5 @@ done < "$temp_hash_file"
 # Löschen der temporären Datei
 rm "$temp_hash_file"
 
-# Ausgabe einer Nachricht, die anzeigt, dass Dubletten durch Symlinks ersetzt wurden.
-echo "Dubletten wurden durch Symlinks ersetzt."
+# Ausgabe einer Nachricht, dass Programm erfolgreich ausgeführt wurde
+echo "Programm erfolgreich ausgeführt"

@@ -5,7 +5,7 @@ if [[ $# != 1 ]]; then
 fi
 
 folder_path="$1"
-duplicate_folder_path="$PWD/.originals"
+duplicate_folder_path="$HOME/.originals"
 
 mkdir -p "$duplicate_folder_path"
 temp_hash_file=$(mktemp)
@@ -43,4 +43,4 @@ do
 done < "$temp_hash_file"
 
 rm "$temp_hash_file"
-echo "Dubletten wurden durch Symlinks ersetzt."
+echo "Programm erfolgreich ausgeführt"
